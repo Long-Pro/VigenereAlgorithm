@@ -132,8 +132,8 @@ public class Client extends javax.swing.JFrame {
         // TODO add your handling code here:
         String key=jTextField_key.getText().trim();
         String raw=jTextArea_raw.getText().trim();
-        //String encode=jTextArea_encode.getText().trim();
-        //String result=jLabel_result.getName().trim();
+        String code=func.encode(raw, key);
+        jTextArea_encode.setText(code);
         System.out.printf("key:%s - raw: %s\n",key,raw);
         
         try {
@@ -143,21 +143,28 @@ public class Client extends javax.swing.JFrame {
             // tạo datagrampacket gửi
             byte keyArr[]=new byte[800000];
             keyArr=key.getBytes();
-            byte rawArr[]=new byte[800000];
-            rawArr=raw.getBytes();
+            byte codeArr[]=new byte[800000];
+            codeArr=raw.getBytes();
             InetAddress ip=InetAddress.getByName("localhost");
             int port=8888;
+            DatagramPacket doutCode=new DatagramPacket(codeArr,codeArr.length,ip,port);
+            client.send(doutCode);
             DatagramPacket doutKey=new DatagramPacket(keyArr,keyArr.length,ip,port);
             client.send(doutKey);
-            DatagramPacket doutRaw=new DatagramPacket(rawArr,rawArr.length,ip,port);
-            client.send(doutRaw);
             // tạo datagrampacket nhận
-            byte resultArr[]=new byte[800000];
-            DatagramPacket dinResult=new DatagramPacket(resultArr,resultArr.length);
-            client.receive(dinResult);
-            String ressult=new String(dinResult.getData(),0,dinResult.getLength()).trim();
+            byte cArr[]=new byte[800000];
+            DatagramPacket dinC=new DatagramPacket(cArr,cArr.length);
+            client.receive(dinC);
+            String c=new String(dinC.getData(),0,dinC.getLength()).trim();
+            
+            byte qArr[]=new byte[800000];
+            DatagramPacket dinQ=new DatagramPacket(qArr,qArr.length);
+            client.receive(dinQ);
+            String q=new String(dinQ.getData(),0,dinQ.getLength()).trim();
             // hiện thị dữ liệu lên mh
-            System.out.println(ressult);
+            String result="Kí tự xuất hiện nhiều nhất là "+c+" với số lần là "+q;
+            jLabel_result.setText(result);
+            System.out.println(result);
             
                     
 

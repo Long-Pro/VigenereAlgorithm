@@ -18,21 +18,29 @@ public class Server {
         while(true){
 //        gđ 3-server nhận dữ liệu
             byte keyArr[]=new byte[800000];
-            byte rawArr[]=new byte[800000];
+            byte codeArr[]=new byte[800000];
+            DatagramPacket dinCode=new DatagramPacket(codeArr,codeArr.length);
+            server.receive(dinCode);
             DatagramPacket dinKey=new DatagramPacket(keyArr,keyArr.length);
             server.receive(dinKey);
-            DatagramPacket dinRaw=new DatagramPacket(rawArr,rawArr.length);
-            server.receive(dinRaw);
+            
             String key=new String(dinKey.getData(),0,dinKey.getLength()).trim();
-            String raw=new String(dinRaw.getData(),0,dinRaw.getLength()).trim();
+            String code=new String(dinCode.getData(),0,dinCode.getLength()).trim();
             // server xử lí dữ liệu
-            String result=key+"---"+raw;
-            //CQ cq=func.findMostChar(raw);
+            //String result=key+"---"+raw;
+            String raw=func.decode(code, key);
+            CQ cq=func.findMostChar(raw);
             // server gửi dữ liệu vè cho client
-            byte resultArr[]=new byte[800000];
-            resultArr=result.getBytes();
-            DatagramPacket doutResult=new DatagramPacket(resultArr,resultArr.length, dinKey.getAddress(),dinKey.getPort());
-            server.send(doutResult);
+            byte cArr[]=new byte[800000];
+            byte qArr[]=new byte[800000];
+
+            cArr=cq.getC().getBytes();
+            DatagramPacket doutC=new DatagramPacket(cArr,cArr.length, dinKey.getAddress(),dinKey.getPort());
+            server.send(doutC);
+            qArr=String.valueOf(cq.getQ()).getBytes();
+            DatagramPacket doutQ=new DatagramPacket(qArr,qArr.length, dinKey.getAddress(),dinKey.getPort());
+            server.send(doutQ);
+            System.out.println(code+" "+key+" "+cq.getC()+" "+cq.getQ());
                
         }
     }
