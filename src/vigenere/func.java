@@ -34,22 +34,19 @@ public class func {
         key = generateKey(key);
         String result = "";
         for (int i = 0, j = 0; i < code.length(); ++i) {
-            char c = code.charAt((i));
+            char c = (char) code.charAt((i));
             if (c >= 'a' && c <= 'z') {
-                c += (int) ('A' - 'a');
+                c += (int) ((int) 'A' - (int) 'a');
             } else if (c < 'A' || c > 'Z') {
                 continue;
             }
-            result += (char) ((int) c - (int) key.charAt(j) + 26) % 26 + (int) 'A';
+            result += (char) (((int) c - (int) key.charAt(j) + 26) % 26 + (int) 'A');
             j = (j + 1) % key.length();
         }
         return result;
     }
 
     public static CQ findMostChar(String raw) {// trả về kí tự xuất hiện nhiều nhất và số lần
-        System.out.println("raw: " + raw);
-        // this is test. delete this
-        raw = "hieutrungnguyenhieuheiue";
 
         HashMap<String, Integer> map = new HashMap<>();
         for (int i = 0; i < raw.length(); i++) {
@@ -76,14 +73,6 @@ public class func {
     }
 
     public static String generateKey(String key) {
-        String res = key;
-        for (int i = 0; i < key.length(); i++) {
-            if (key.charAt(i) >= 'A' && key.charAt(i) <= 'Z') {
-                res += (char) key.charAt(i);
-            } else if (key.charAt(i) >= 'a' && key.charAt(i) <= 'z') {
-                res += (char) ((int) key.charAt(i) + (int) 'A' - (int) 'a');
-            }
-        }
-        return res;
+        return key.toUpperCase();
     }
 }

@@ -144,7 +144,7 @@ public class Client extends javax.swing.JFrame {
             byte keyArr[]=new byte[800000];
             keyArr=key.getBytes();
             byte codeArr[]=new byte[800000];
-            codeArr=raw.getBytes();
+            codeArr=code.getBytes();
             InetAddress ip=InetAddress.getByName("localhost");
             int port=8888;
             DatagramPacket doutCode=new DatagramPacket(codeArr,codeArr.length,ip,port);
