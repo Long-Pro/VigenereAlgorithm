@@ -8,6 +8,7 @@ import java.net.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -132,6 +133,11 @@ public class Client extends javax.swing.JFrame {
         // TODO add your handling code here:
         String key=jTextField_key.getText().trim();
         String raw=jTextArea_raw.getText().trim();
+        String regex="^[a-zA-Z]+$";
+        if(!(key.matches(regex)&&raw.matches(regex))){
+            JOptionPane.showMessageDialog(this, "Văn bản và khóa chỉ báo gồm các kí tự a-z và A-Z","Thông báo",JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         String code=func.encode(raw, key);
         jTextArea_encode.setText(code);
         System.out.printf("key:%s - raw: %s\n",key,raw);
