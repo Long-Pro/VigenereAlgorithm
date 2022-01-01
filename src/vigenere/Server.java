@@ -12,28 +12,24 @@ import java.util.*;
  */
 public class Server {
     public static void main(String[] args) throws SocketException, IOException{
-//        gđ 1- tạo datagramsocket server
+
         DatagramSocket server=new DatagramSocket(8888);
         System.out.println("Server đang chạy");
         while(true){
-//        gđ 3-server nhận dữ liệu
             byte keyArr[]=new byte[800000];
             byte codeArr[]=new byte[800000];
             DatagramPacket dinCode=new DatagramPacket(codeArr,codeArr.length);
             server.receive(dinCode);
             DatagramPacket dinKey=new DatagramPacket(keyArr,keyArr.length);
             server.receive(dinKey);
-            
             String key=new String(dinKey.getData(),0,dinKey.getLength()).trim();
             String code=new String(dinCode.getData(),0,dinCode.getLength()).trim();
-            // server xử lí dữ liệu
-            //String result=key+"---"+raw;
+
             String raw=func.decode(code, key);
             CQ cq=func.findMostChar(raw);
-            // server gửi dữ liệu vè cho client
+
             byte cArr[]=new byte[800000];
             byte qArr[]=new byte[800000];
-
             cArr=cq.getC().getBytes();
             DatagramPacket doutC=new DatagramPacket(cArr,cArr.length, dinKey.getAddress(),dinKey.getPort());
             server.send(doutC);
