@@ -74,7 +74,7 @@ public class Client extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTextArea_encode);
 
         jLabel_result.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel_result.setText("Kí tự xuất hiện nhiều nhất là X với số lần là Y");
+        jLabel_result.setText("Kí tự xuất hiện nhiều nhất là _ với số lần là _ ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -143,10 +143,8 @@ public class Client extends javax.swing.JFrame {
         System.out.printf("key:%s - raw: %s\n",key,raw);
         
         try {
-//            gđ 2-tạo datagramsocket client
             DatagramSocket client=new DatagramSocket();
-//            gđ 3-trên client, tọa dữ liệu gửi bi
-            // tạo datagrampacket gửi
+
             byte keyArr[]=new byte[800000];
             keyArr=key.getBytes();
             byte codeArr[]=new byte[800000];
@@ -157,7 +155,7 @@ public class Client extends javax.swing.JFrame {
             client.send(doutCode);
             DatagramPacket doutKey=new DatagramPacket(keyArr,keyArr.length,ip,port);
             client.send(doutKey);
-            // tạo datagrampacket nhận
+ 
             byte cArr[]=new byte[800000];
             DatagramPacket dinC=new DatagramPacket(cArr,cArr.length);
             client.receive(dinC);
@@ -167,7 +165,7 @@ public class Client extends javax.swing.JFrame {
             DatagramPacket dinQ=new DatagramPacket(qArr,qArr.length);
             client.receive(dinQ);
             String q=new String(dinQ.getData(),0,dinQ.getLength()).trim();
-            // hiện thị dữ liệu lên mh
+
             String result="Kí tự xuất hiện nhiều nhất là "+c+" với số lần là "+q;
             jLabel_result.setText(result);
             System.out.println(result);
