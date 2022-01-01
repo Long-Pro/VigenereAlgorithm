@@ -13,40 +13,37 @@ import java.util.Set;
  */
 public class func {
 
-    public static String encode(String raw, String key) {//mã hóa raw ,trả về raw đã được mã hóa
-        key = generateKey(key);
-        System.out.println(key);
+    public static String encode(String raw, String key) {
+        raw = raw.toUpperCase();
+        key = generateKey(key, raw);
+        System.out.println("key: " + key);
         String result = "";
-        for (int i = 0, j = 0; i < raw.length(); i++) {
-            char c = raw.charAt(i);
-            if (c >= 'a' && c <= 'z') {
-                c += (int) ('A' - 'a');
-            } else if (c < 'A' || c > 'Z') {
-                continue;
-            }
-            result += (char) (((int) c + (int) key.charAt(j) - 2 * (int) 'A') % 26 + (int) 'A');
-            j = (j + 1) % key.length();
+        for (int i = 0; i < raw.length(); i++) {
+            int x = (raw.charAt(i) + key.charAt(i)) % 26;
+
+            x += 'A';
+
+            result += (char) (x);
         }
         return result;
     }
 
-    public static String decode(String code, String key) {//giải mã code ,trả về code đã được giải mã
-        key = generateKey(key);
+    public static String decode(String code, String key) {
+        code = code.toUpperCase();
+        key = generateKey(key, code);
         String result = "";
-        for (int i = 0, j = 0; i < code.length(); ++i) {
-            char c = (char) code.charAt((i));
-            if (c >= 'a' && c <= 'z') {
-                c += (int) ((int) 'A' - (int) 'a');
-            } else if (c < 'A' || c > 'Z') {
-                continue;
-            }
-            result += (char) (((int) c - (int) key.charAt(j) + 26) % 26 + (int) 'A');
-            j = (j + 1) % key.length();
+        for (int i = 0; i < code.length(); i++) {
+            int x = (code.charAt(i) - key.charAt(i) + 26) % 26;
+
+            x += 'A';
+            result += (char) (x);
         }
         return result;
     }
 
-    public static CQ findMostChar(String raw) {// trả về kí tự xuất hiện nhiều nhất và số lần
+    public static CQ findMostChar(String raw) {
+        int max = 0;
+        String str = "";
 
         HashMap<String, Integer> map = new HashMap<>();
         for (int i = 0; i < raw.length(); i++) {
@@ -56,23 +53,29 @@ public class func {
             } else {
                 map.put(x, 1);
             }
-        }
 
-        int max = 0;
-        String str = "";
-        Set<String> keySet = map.keySet();
-        for (String c : keySet) {
-            if (map.get(c) > max) {
-                max = map.get(c);
-                str = c;
+            int num = map.get(x);
+            if (num > max) {
+                max = num;
+                str = x;
             }
+
         }
 
         CQ cq = new CQ(str, max);
         return cq;
     }
 
-    public static String generateKey(String key) {
+    public static String generateKey(String key, String str) {
+        for (int i = 0;; i++) {
+            if (str.length() == i) {
+                i = 0;
+            }
+            if (key.length() == str.length()) {
+                break;
+            }
+            key += (key.charAt(i));
+        }
         return key.toUpperCase();
     }
 }
